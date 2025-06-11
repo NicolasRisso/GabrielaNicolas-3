@@ -94,7 +94,7 @@ header h1 {
     padding: 0;
     border-radius: 0;
     display: inline-block;
-    font-size: 1.1em;
+    font-size: 1.25em; /* Increased font size */
 }
 
 .timer-number {
@@ -111,15 +111,16 @@ main {
 }
 
 #photo-carousel {
-    max-width: 800px;
+    max-width: 800px; /* This max-width includes the new padding */
     margin: 0 auto;
-    padding: 1em;
+    padding: 1em 50px; /* Added horizontal padding for arrows */
+    position: relative; /* Ensure this is the positioning context for arrows */
     /* background-color: #ffffff; -- REMOVED for dark theme */
     /* border: 1px solid #ddd; -- REMOVED for dark theme */
     /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); -- REMOVED for dark theme */
     text-align: center;
     /* overflow: hidden; -- MOVED to .carousel-viewport */
-    /* position: relative; -- MOVED to .carousel-viewport */
+    /* position: relative; -- MOVED to .carousel-viewport, but now needed here too */
 }
 
 .carousel-viewport {
@@ -174,6 +175,19 @@ main {
     opacity: 1;
 }
 
+.carousel-img-item.prev-img .carousel-item-caption-text,
+.carousel-img-item.next-img .carousel-item-caption-text {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.carousel-img-item.current-img .carousel-item-caption-text {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out 0.1s, visibility 0.3s ease-in-out 0.1s; /* Slight delay to ensure card is visible first */
+}
+
 /* New Caption Styling for text inside cards */
 .carousel-item-caption-text {
     font-family: 'Roboto', sans-serif;
@@ -205,10 +219,11 @@ main {
      /* margin: 0 auto; /* REMOVE this if it's a flex item in filmstrip */
 }
 
-
+/* Removed .nav-buttons rule as the div is no longer used
 #photo-carousel .nav-buttons {
     margin-top: 10px;
 }
+*/
 
 #prev-button, #next-button {
     font-family: 'Roboto', sans-serif;
@@ -221,7 +236,7 @@ main {
     border: none;
     /* border-radius: 5px; -- REMOVED */
     /* margin: 0 5px; -- REMOVED */
-    transition: color 0.3s ease; /* Only color transition */
+    transition: color 0.3s ease;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

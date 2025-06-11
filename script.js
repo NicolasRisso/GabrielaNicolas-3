@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateTimer() {
         const now = new Date();
-        const difference = targetDate - now;
+        const difference = targetDate.getTime() - now.getTime();
 
         if (difference > 0) {
             const timeUntilStart = difference;
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (timeUntilStart > 1000) {
                     let message = "Contando os segundos para: ";
                     if (daysUntil > 0) {
-                        message += `<span class="timer-number">${daysUntil}</span>dias `;
+                        message += `<span class="timer-number">${daysUntil}</span>dia${daysUntil !== 1 ? 's' : ''} `;
                     }
                     message += `<span class="timer-number">${hoursUntil}</span>h <span class="timer-number">${minutesUntil}</span>m <span class="timer-number">${secondsUntil}</span>s!`;
                     countdownTimerElement.innerHTML = message;
@@ -28,31 +28,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return;
         } else {
-            const timeSinceTarget = now - targetDate;
+            const timeSinceTargetMs = now.getTime() - targetDate.getTime();
 
-            let totalDays = Math.floor(timeSinceTarget / (1000 * 60 * 60 * 24));
-            let years = Math.floor(totalDays / 365.25);
-            let remainingDaysForMonths = Math.floor(totalDays % 365.25);
-            let months = Math.floor(remainingDaysForMonths / 30.44);
-            let days = Math.floor(remainingDaysForMonths % 30.44);
+            const s = Math.floor((timeSinceTargetMs / 1000) % 60);
+            const m = Math.floor((timeSinceTargetMs / (1000 * 60)) % 60);
+            const h = Math.floor((timeSinceTargetMs / (1000 * 60 * 60)) % 24);
 
-            const h = Math.floor((timeSinceTarget % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((timeSinceTarget % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((timeSinceTarget % (1000 * 60)) / 1000);
+            let years = now.getFullYear() - targetDate.getFullYear();
+            let months = now.getMonth() - targetDate.getMonth();
+            let days = now.getDate() - targetDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const daysInLastFullMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+                days += daysInLastFullMonth;
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
 
             if (countdownTimerElement) {
-                let timerString = `Feliz `;
-                if (years > 0) timerString += `<span class="timer-number">${years}</span> ano${years > 1 ? 's' : ''}, `;
-                if (months > 0 || years > 0) timerString += `<span class="timer-number">${months}</span> mes${months > 1 ? 'es' : ''}, `;
-                if (days > 0 || years > 0 || months > 0) timerString += `<span class="timer-number">${days}</span> dia${days > 1 ? 's' : ''} `;
+                const monthStr = `<span class="timer-number">${months}</span> mes${months !== 1 ? 'es' : ''}`;
+                const dayStr = `<span class="timer-number">${days}</span> dia${days !== 1 ? 's' : ''}`;
+                const hourStr = `<span class="timer-number">${h}</span>h`;
+                const minStr = `<span class="timer-number">${m}</span>m`;
+                const secStr = `<span class="timer-number">${s}</span>s`;
 
-                if (years === 0 && months === 0 && days === 0) {
-                    timerString += `algumas horas de namoro `;
-                } else {
-                     timerString += `de namoro `;
-                }
-                timerString += `<span class="timer-number">${h}</span>h, <span class="timer-number">${m}</span>m, <span class="timer-number">${s}</span>s`;
-                countdownTimerElement.innerHTML = timerString;
+                let timerDisplayString = [monthStr, dayStr, hourStr, minStr, secStr].join(', ');
+
+                countdownTimerElement.innerHTML = "Feliz " + timerDisplayString;
             }
         }
     }
@@ -79,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const carouselElement = document.getElementById('photo-carousel');
     const viewportElement = document.querySelector('.carousel-viewport');
     const filmstripElement = document.querySelector('.carousel-filmstrip');
-    // const captionElement = document.getElementById('carousel-caption'); // REMOVED - captions are per-item now
     const prevButtonElement = document.getElementById('prev-button');
     const nextButtonElement = document.getElementById('next-button');
 
@@ -94,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         filmstripElement.innerHTML = '';
         imagePaths.forEach((path, i) => {
-            const card = document.createElement('figure'); // Use figure for semantic grouping
+            const card = document.createElement('figure');
             card.classList.add('carousel-img-item');
 
             const img = document.createElement('img');
@@ -103,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const caption = document.createElement('figcaption');
             caption.classList.add('carousel-item-caption-text');
-            caption.textContent = imageCaptions[i] || ""; // Ensure caption text is set
+            caption.textContent = imageCaptions[i] || "";
 
             card.appendChild(img);
             card.appendChild(caption);
@@ -116,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Filmstrip or Viewport element not found for slideTo!");
             return;
         }
-        const allCards = filmstripElement.querySelectorAll('.carousel-img-item'); // Now these are cards
+        const allCards = filmstripElement.querySelectorAll('.carousel-img-item');
         if (!allCards.length || index < 0 || index >= allCards.length) {
             console.error(`Invalid index or no cards in filmstrip. Index: ${index}, Count: ${allCards.length}`);
             return;
@@ -151,8 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (allCards.length === 1 && allCards[0]) {
             allCards[0].classList.remove('prev-img', 'next-img');
         }
-
-        // Removed old caption update logic for #carousel-caption
     }
 
     function stopAutoSlide() {
@@ -211,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } else {
         console.error("Carousel cannot start: Missing elements, or imagePaths/imageCaptions length mismatch or empty.");
-        // if (captionElement) captionElement.textContent = "Erro ao carregar o carrossel."; // Old caption
     }
     // --- Carousel Code END ---
 });
