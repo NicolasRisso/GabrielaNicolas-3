@@ -85,16 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Filmstrip element not found!");
             return;
         }
-        filmstripElement.innerHTML = ''; // Clear existing content
+        filmstripElement.innerHTML = '';
         imagePaths.forEach((path, i) => {
             const img = document.createElement('img');
             img.src = path;
-            img.alt = `Foto ${i + 1}`; // Or use imageCaptions[i] for more descriptive alt
+            img.alt = imageCaptions[i] || `Foto ${i + 1}`;
             img.classList.add('carousel-img-item');
-            if (i === currentImageIndex) {
-                // img.id = 'carousel-image'; // ID might not be strictly needed if using classes
-                img.classList.add('current-img');
-            }
             filmstripElement.appendChild(img);
         });
     }
@@ -104,31 +100,47 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Filmstrip or Viewport element not found for slideTo!");
             return;
         }
+        const allImages = filmstripElement.querySelectorAll('.carousel-img-item');
+        if (!allImages.length || index < 0 || index >= allImages.length) {
+            console.error(`Invalid index or no images in filmstrip. Index: ${index}, Count: ${allImages.length}`);
+            return;
+        }
 
-        const itemWidth = viewportElement.offsetWidth;
-        const newTransform = -index * itemWidth;
+        const viewportWidth = viewportElement.offsetWidth;
+        const imageToCenter = allImages[index];
+
+        // Calculate the translation needed to center the target image
+        // 1. Position of the left edge of the target image relative to the filmstrip: imageToCenter.offsetLeft
+        // 2. Desired position of the left edge of the target image, so it's centered in viewport:
+        //    (viewportWidth / 2) - (imageToCenter.offsetWidth / 2)
+        // 3. TranslateX = Desired Left Position - Current Left Position (relative to filmstrip's current translation)
+        const newTransform = (viewportWidth / 2) - (imageToCenter.offsetWidth / 2) - imageToCenter.offsetLeft;
+
         filmstripElement.style.transform = `translateX(${newTransform}px)`;
 
-        const allImages = filmstripElement.querySelectorAll('.carousel-img-item');
         allImages.forEach(img => {
             img.classList.remove('current-img', 'prev-img', 'next-img');
-            // img.removeAttribute('id'); // Remove ID if it was set
         });
 
-        if (allImages[index]) {
-            allImages[index].classList.add('current-img');
-            // allImages[index].id = 'carousel-image'; // Re-assign ID if needed
-        }
+        imageToCenter.classList.add('current-img');
 
         const prevIndex = (index - 1 + imagePaths.length) % imagePaths.length;
         const nextIndex = (index + 1) % imagePaths.length;
 
-        if (allImages[prevIndex]) allImages[prevIndex].classList.add('prev-img');
-        if (allImages[nextIndex]) allImages[nextIndex].classList.add('next-img');
+        if (allImages[prevIndex]) {
+             allImages[prevIndex].classList.add('prev-img');
+        }
+        if (allImages[nextIndex]) {
+            allImages[nextIndex].classList.add('next-img');
+        }
 
-        // Handle edge case for 2 images where prev and next are the same
+        // Ensure that if prev and next are the same (e.g. 2 images), only one class applies
         if (imagePaths.length === 2 && prevIndex === nextIndex && allImages[prevIndex]) {
-            allImages[prevIndex].classList.remove('next-img'); // Avoid both prev and next on same image
+            allImages[prevIndex].classList.remove('next-img');
+        }
+        // If only 1 image, it shouldn't have prev/next classes
+        if (imagePaths.length === 1 && allImages[0]) {
+            allImages[0].classList.remove('prev-img', 'next-img');
         }
 
 
@@ -164,7 +176,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialization
     if (imagePaths.length > 0 && imagePaths.length === imageCaptions.length && filmstripElement && viewportElement) {
         populateFilmstrip();
-        slideTo(currentImageIndex); // Set initial position and classes
+        // Call slideTo AFTER images are loaded or use a window.onload or image.onload listener
+        // For simplicity now, assuming images have dimensions quickly.
+        // A slight delay or ResizeObserver might be needed for robust offsetWidth/offsetLeft reading
+
+        // Initial slide without transition to set start position correctly
+        const initialTransform = filmstripElement.style.transition;
+        filmstripElement.style.transition = 'none';
+        slideTo(currentImageIndex);
+
+        // Force reflow/repaint before re-enabling transition
+        filmstripElement.offsetHeight; //offsetHeight read
+        filmstripElement.style.transition = initialTransform;
+
 
         if (prevButtonElement && nextButtonElement) {
             prevButtonElement.addEventListener('click', () => prevImage(true));
@@ -173,13 +197,23 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Navigation buttons not found!");
         }
 
-        if (carouselElement) { // photo-carousel is the main container
+        if (carouselElement) {
             carouselElement.addEventListener('mouseenter', stopAutoSlide);
             carouselElement.addEventListener('mouseleave', startAutoSlide);
         } else {
             console.error("Carousel container element (#photo-carousel) not found!");
         }
-        startAutoSlide(); // Start auto-slide after setup
+        startAutoSlide();
+
+        // Optional: Recalculate on window resize
+        window.addEventListener('resize', () => {
+            const tempTransition = filmstripElement.style.transition;
+            filmstripElement.style.transition = 'none'; // Disable transition during resize adjustment
+            slideTo(currentImageIndex);
+            filmstripElement.offsetHeight; // Force reflow
+            filmstripElement.style.transition = tempTransition; // Restore transition
+        });
+
     } else {
         console.error("Carousel cannot start: Missing elements, or imagePaths/imageCaptions length mismatch or empty.");
         if (captionElement) captionElement.textContent = "Erro ao carregar o carrossel.";

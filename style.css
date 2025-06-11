@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+
 /* Global Styles */
 * {
     box-sizing: border-box;
@@ -6,41 +8,79 @@
 }
 
 body {
-    font-family: 'Parisienne', cursive, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
     font-size: 18px;
-    background-color: #FFF8DC; /* Light yellow / Cornsilk */
-    color: #4B0082; /* Indigo / Dark Purple */
-    line-height: 1.6;
+    background-color: #1a1228; /* Dark purple base */
+    background-image:
+        /* Candlelight Glows */
+        radial-gradient(ellipse at 20% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 30%, rgba(255, 223, 102, 0.1) 0%, transparent 35%),
+        radial-gradient(ellipse at 50% 50%, rgba(230, 190, 255, 0.07) 0%, transparent 40%),
+        /* Abstract Curves/Lines */
+        linear-gradient(135deg, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+        linear-gradient(-45deg, rgba(255, 215, 0, 0.05) 10%, transparent 60%);
+    color: #f0e6ff; /* Light lavender default text */
+    line-height: 1.7;
 }
 
 /* Color Palette Variables */
 :root {
     --primary-purple: #8A2BE2; /* BlueViolet */
     --primary-yellow: #FFD700; /* Gold */
-    --dark-text: #333;
-    --light-background: #FFF8DC;
+    --dark-text: #f0e6ff; /* Changed default dark text to light for dark mode */
+    --light-background: #1a1228; /* Changed default light background to dark */
 }
 
 /* Header Styling */
 header {
     text-align: center;
-    padding: 2em 0;
-    background: linear-gradient(to bottom, #fff, #FFF8DC); /* Subtle gradient */
+    padding: 2em 0 1em; /* Adjusted padding */
+    position: relative; /* For pseudo-element hearts */
+    /* background: linear-gradient(to bottom, #fff, #FFF8DC); -- REMOVED */
+}
+
+header::before {
+    content: '💜';
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 2em;
+    opacity: 0.5;
+    transform: rotate(-15deg);
+}
+header::after {
+    content: '💛';
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 2.2em;
+    opacity: 0.5;
+    transform: rotate(10deg);
 }
 
 header h1 {
     font-size: 2.8em;
-    color: var(--primary-purple);
-    font-family: 'Great Vibes', cursive, serif;
-    margin-bottom: 0.5em;
+    color: var(--primary-yellow); /* Gold for main title */
+    font-family: 'Great Vibes', 'Playfair Display', cursive;
+    margin-bottom: 0.2em;
+    text-align: center;
+}
+
+#countdown-timer-container {
+    text-align: center;
+    margin-top: 0.5em;
 }
 
 #countdown-timer {
-    font-weight: bold;
-    color: var(--primary-yellow);
-    background-color: var(--primary-purple);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: var(--primary-purple); /* Purple text */
+    background-color: var(--primary-yellow); /* Gold background */
     padding: 0.2em 0.4em;
     border-radius: 5px;
+    display: inline-block;
+    font-size: 1.1em;
 }
 
 /* Main Content/Carousel Styling */
@@ -52,68 +92,63 @@ main {
     max-width: 800px;
     margin: 0 auto;
     padding: 1em;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center image and buttons */
+    /* background-color: #ffffff; -- REMOVED for dark theme */
+    /* border: 1px solid #ddd; -- REMOVED for dark theme */
+    /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); -- REMOVED for dark theme */
+    text-align: center;
     /* overflow: hidden; -- MOVED to .carousel-viewport */
     /* position: relative; -- MOVED to .carousel-viewport */
 }
 
 .carousel-viewport {
-    width: 100%; /* Or a specific max-width for the viewport itself */
-    max-width: 600px; /* Example: constrain viewport width */
-    margin: 0 auto; /* Center the viewport */
-    overflow: hidden; /* Crucial for filmstrip effect */
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    overflow: hidden;
     position: relative;
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle light background for carousel area */
+    border: 1px solid var(--primary-yellow, #FFD700); /* Yellow border */
 }
 
 .carousel-filmstrip {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    /* Height will be determined by content or a fixed value if needed */
+    align-items: center; /* This was the line that was already present and causing diff issues */
 }
 
 .carousel-img-item {
     flex-shrink: 0;
-    width: 100%; /* Each item takes full width of .carousel-viewport */
+    width: 60%;
+    margin: 0 1.5%;
     max-height: 400px;
     object-fit: contain;
-    border: 2px solid var(--primary-purple);
+    border: 2px solid var(--primary-yellow, #FFD700); /* Yellow image border */
     border-radius: 8px;
     display: block;
-    /* margin: 0 5px; /* Creates space between images, but makes width calculation complex for 100% view */
-    /* Instead of margin, if spacing is needed, the filmstrip items could be less than 100% width,
-       or padding on the viewport + clip-path, or complex transform.
-       For now, let's assume images are edge-to-edge in the filmstrip.
-       If previews are achieved by scaling down side images, this is fine.
-    */
-    align-items: center; /* Vertically align items if they have different scaled heights */
 }
 
 .carousel-img-item.prev-img,
 .carousel-img-item.next-img {
-    opacity: 0.5;
-    transform: scale(0.85);
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    opacity: 0.6;
+    transition: opacity 0.5s ease-in-out;
 }
 .carousel-img-item.current-img {
     opacity: 1;
-    transform: scale(1); /* Ensure it's full size */
-    /* box-shadow: 0 0 10px rgba(0,0,0,0.3); */ /* Optional: for more prominence */
 }
 
 
 /* Caption Styling */
 .carousel-caption {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
     text-align: center;
     margin-top: 10px;
     padding: 5px;
     font-size: 0.95em;
-    color: var(--dark-text, #333); /* Using a fallback if --dark-text is not defined */
-    min-height: 1.5em; /* To prevent layout jumps */
+    color: #f5f5dc; /* Beige for caption text */
+    min-height: 1.5em;
     font-style: italic;
-    margin-bottom: 15px; /* Add space before buttons if they are below caption */
+    margin-bottom: 15px;
 }
 
 /* #carousel-image ID is now one of the .carousel-img-item.
@@ -137,9 +172,10 @@ main {
 }
 
 #prev-button, #next-button {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* bold */
     padding: 10px 15px;
     font-size: 1em;
-    font-weight: bold;
     cursor: pointer;
     background-color: var(--primary-yellow);
     color: var(--primary-purple);
@@ -152,21 +188,44 @@ main {
 #prev-button:hover, #next-button:hover {
     background-color: var(--primary-purple);
     color: var(--primary-yellow);
+    border: 1px solid var(--primary-yellow); /* Hover border matches text */
 }
 
 
 /* Footer Styling */
 footer {
     text-align: center;
-    padding: 2em 0;
-    background-color: #f0e6ff; /* Light lavender */
+    padding: 2em 0 1em; /* Adjusted padding */
+    /* background-color: #f0e6ff; -- REMOVED */
     margin-top: 2em;
+    position: relative; /* For pseudo-element hearts */
+    border-top: 1px solid rgba(255, 215, 0, 0.2); /* Subtle separator */
+}
+
+footer::before {
+    content: '💛';
+    position: absolute;
+    bottom: 10px;
+    left: 30px;
+    font-size: 1.8em;
+    opacity: 0.4;
+    transform: rotate(20deg);
+}
+footer::after {
+    content: '💜';
+    position: absolute;
+    bottom: 15px;
+    right: 35px;
+    font-size: 2em;
+    opacity: 0.4;
+    transform: rotate(-10deg);
 }
 
 footer p {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
     font-size: 1.2em;
-    color: var(--primary-purple);
-    font-weight: bold;
+    color: var(--primary-yellow); /* Gold for footer message */
 }
 
 /* Responsive Design */
