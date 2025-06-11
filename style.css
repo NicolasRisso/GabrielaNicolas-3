@@ -56,17 +56,81 @@ main {
     border: 1px solid #ddd;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     text-align: center; /* Center image and buttons */
+    /* overflow: hidden; -- MOVED to .carousel-viewport */
+    /* position: relative; -- MOVED to .carousel-viewport */
 }
 
-#carousel-image {
-    display: block;
-    max-width: 100%;
-    max-height: 500px; /* Or a suitable height for your design */
-    margin: 10px auto; /* Center it and add some space */
+.carousel-viewport {
+    width: 100%; /* Or a specific max-width for the viewport itself */
+    max-width: 600px; /* Example: constrain viewport width */
+    margin: 0 auto; /* Center the viewport */
+    overflow: hidden; /* Crucial for filmstrip effect */
+    position: relative;
+}
+
+.carousel-filmstrip {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    /* Height will be determined by content or a fixed value if needed */
+}
+
+.carousel-img-item {
+    flex-shrink: 0;
+    width: 100%; /* Each item takes full width of .carousel-viewport */
+    max-height: 400px;
+    object-fit: contain;
     border: 2px solid var(--primary-purple);
     border-radius: 8px;
-    object-fit: contain; /* Or 'cover' depending on desired behavior */
+    display: block;
+    /* margin: 0 5px; /* Creates space between images, but makes width calculation complex for 100% view */
+    /* Instead of margin, if spacing is needed, the filmstrip items could be less than 100% width,
+       or padding on the viewport + clip-path, or complex transform.
+       For now, let's assume images are edge-to-edge in the filmstrip.
+       If previews are achieved by scaling down side images, this is fine.
+    */
+    align-items: center; /* Vertically align items if they have different scaled heights */
 }
+
+.carousel-img-item.prev-img,
+.carousel-img-item.next-img {
+    opacity: 0.5;
+    transform: scale(0.85);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.carousel-img-item.current-img {
+    opacity: 1;
+    transform: scale(1); /* Ensure it's full size */
+    /* box-shadow: 0 0 10px rgba(0,0,0,0.3); */ /* Optional: for more prominence */
+}
+
+
+/* Caption Styling */
+.carousel-caption {
+    text-align: center;
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 0.95em;
+    color: var(--dark-text, #333); /* Using a fallback if --dark-text is not defined */
+    min-height: 1.5em; /* To prevent layout jumps */
+    font-style: italic;
+    margin-bottom: 15px; /* Add space before buttons if they are below caption */
+}
+
+/* #carousel-image ID is now one of the .carousel-img-item.
+   Specific styling for the 'current' image can be done by adding a class like '.current-img' by JS.
+   So, we remove direct #carousel-image styling if it's redundant with .carousel-img-item
+   or conflicts with filmstrip behavior.
+*/
+#carousel-image {
+    /* This ID will be on the central image.
+       It should inherit from .carousel-img-item.
+       Any specific overrides for the main image *slot* could go here,
+       but most styling should be on .carousel-img-item and modifier classes.
+       Ensure no conflicting margin:auto if it's a flex item.
+    */
+     /* margin: 0 auto; /* REMOVE this if it's a flex item in filmstrip */
+}
+
 
 #photo-carousel .nav-buttons {
     margin-top: 10px;
