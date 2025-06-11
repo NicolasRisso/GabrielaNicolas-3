@@ -16,7 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (countdownTimerElement) {
                 if (timeUntilStart > 1000) {
-                    countdownTimerElement.innerHTML = `Contando os segundos para: ${daysUntil > 0 ? daysUntil + 'dias ' : ''}${hoursUntil}h ${minutesUntil}m ${secondsUntil}s!`;
+                    let message = "Contando os segundos para: ";
+                    if (daysUntil > 0) {
+                        message += `<span class="timer-number">${daysUntil}</span>dias `;
+                    }
+                    message += `<span class="timer-number">${hoursUntil}</span>h <span class="timer-number">${minutesUntil}</span>m <span class="timer-number">${secondsUntil}</span>s!`;
+                    countdownTimerElement.innerHTML = message;
                 } else {
                     countdownTimerElement.innerHTML = "Feliz Dia dos Namorados!";
                 }
@@ -24,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         } else {
             const timeSinceTarget = now - targetDate;
+
             let totalDays = Math.floor(timeSinceTarget / (1000 * 60 * 60 * 24));
             let years = Math.floor(totalDays / 365.25);
             let remainingDaysForMonths = Math.floor(totalDays % 365.25);
@@ -36,15 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (countdownTimerElement) {
                 let timerString = `Feliz `;
-                if (years > 0) timerString += `${years} ano${years > 1 ? 's' : ''}, `;
-                if (months > 0 || years > 0) timerString += `${months} mes${months > 1 ? 'es' : ''}, `;
-                if (days > 0 || years > 0 || months > 0) timerString += `${days} dia${days > 1 ? 's' : ''} `;
+                if (years > 0) timerString += `<span class="timer-number">${years}</span> ano${years > 1 ? 's' : ''}, `;
+                if (months > 0 || years > 0) timerString += `<span class="timer-number">${months}</span> mes${months > 1 ? 'es' : ''}, `;
+                if (days > 0 || years > 0 || months > 0) timerString += `<span class="timer-number">${days}</span> dia${days > 1 ? 's' : ''} `;
+
                 if (years === 0 && months === 0 && days === 0) {
                     timerString += `algumas horas de namoro `;
                 } else {
                      timerString += `de namoro `;
                 }
-                timerString += `${h}h, ${m}m, ${s}s`;
+                timerString += `<span class="timer-number">${h}</span>h, <span class="timer-number">${m}</span>m, <span class="timer-number">${s}</span>s`;
                 countdownTimerElement.innerHTML = timerString;
             }
         }
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carouselElement = document.getElementById('photo-carousel');
     const viewportElement = document.querySelector('.carousel-viewport');
     const filmstripElement = document.querySelector('.carousel-filmstrip');
-    const captionElement = document.getElementById('carousel-caption');
+    // const captionElement = document.getElementById('carousel-caption'); // REMOVED - captions are per-item now
     const prevButtonElement = document.getElementById('prev-button');
     const nextButtonElement = document.getElementById('next-button');
 
@@ -87,11 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         filmstripElement.innerHTML = '';
         imagePaths.forEach((path, i) => {
+            const card = document.createElement('figure'); // Use figure for semantic grouping
+            card.classList.add('carousel-img-item');
+
             const img = document.createElement('img');
             img.src = path;
             img.alt = imageCaptions[i] || `Foto ${i + 1}`;
-            img.classList.add('carousel-img-item');
-            filmstripElement.appendChild(img);
+
+            const caption = document.createElement('figcaption');
+            caption.classList.add('carousel-item-caption-text');
+            caption.textContent = imageCaptions[i] || ""; // Ensure caption text is set
+
+            card.appendChild(img);
+            card.appendChild(caption);
+            filmstripElement.appendChild(card);
         });
     }
 
@@ -100,56 +116,43 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Filmstrip or Viewport element not found for slideTo!");
             return;
         }
-        const allImages = filmstripElement.querySelectorAll('.carousel-img-item');
-        if (!allImages.length || index < 0 || index >= allImages.length) {
-            console.error(`Invalid index or no images in filmstrip. Index: ${index}, Count: ${allImages.length}`);
+        const allCards = filmstripElement.querySelectorAll('.carousel-img-item'); // Now these are cards
+        if (!allCards.length || index < 0 || index >= allCards.length) {
+            console.error(`Invalid index or no cards in filmstrip. Index: ${index}, Count: ${allCards.length}`);
             return;
         }
 
         const viewportWidth = viewportElement.offsetWidth;
-        const imageToCenter = allImages[index];
+        const cardToCenter = allCards[index];
 
-        // Calculate the translation needed to center the target image
-        // 1. Position of the left edge of the target image relative to the filmstrip: imageToCenter.offsetLeft
-        // 2. Desired position of the left edge of the target image, so it's centered in viewport:
-        //    (viewportWidth / 2) - (imageToCenter.offsetWidth / 2)
-        // 3. TranslateX = Desired Left Position - Current Left Position (relative to filmstrip's current translation)
-        const newTransform = (viewportWidth / 2) - (imageToCenter.offsetWidth / 2) - imageToCenter.offsetLeft;
+        const newTransform = (viewportWidth / 2) - (cardToCenter.offsetWidth / 2) - cardToCenter.offsetLeft;
 
         filmstripElement.style.transform = `translateX(${newTransform}px)`;
 
-        allImages.forEach(img => {
-            img.classList.remove('current-img', 'prev-img', 'next-img');
+        allCards.forEach(card => {
+            card.classList.remove('current-img', 'prev-img', 'next-img');
         });
 
-        imageToCenter.classList.add('current-img');
+        cardToCenter.classList.add('current-img');
 
-        const prevIndex = (index - 1 + imagePaths.length) % imagePaths.length;
-        const nextIndex = (index + 1) % imagePaths.length;
+        const prevIndex = (index - 1 + allCards.length) % allCards.length;
+        const nextIndex = (index + 1) % allCards.length;
 
-        if (allImages[prevIndex]) {
-             allImages[prevIndex].classList.add('prev-img');
+        if (allCards[prevIndex]) {
+             allCards[prevIndex].classList.add('prev-img');
         }
-        if (allImages[nextIndex]) {
-            allImages[nextIndex].classList.add('next-img');
-        }
-
-        // Ensure that if prev and next are the same (e.g. 2 images), only one class applies
-        if (imagePaths.length === 2 && prevIndex === nextIndex && allImages[prevIndex]) {
-            allImages[prevIndex].classList.remove('next-img');
-        }
-        // If only 1 image, it shouldn't have prev/next classes
-        if (imagePaths.length === 1 && allImages[0]) {
-            allImages[0].classList.remove('prev-img', 'next-img');
+        if (allCards[nextIndex]) {
+            allCards[nextIndex].classList.add('next-img');
         }
 
-
-        if (captionElement && imageCaptions[index]) {
-            captionElement.textContent = imageCaptions[index];
-        } else if (captionElement) {
-            captionElement.textContent = "";
-            console.warn(`Caption not found for image index ${index}`);
+        if (allCards.length === 2 && prevIndex === nextIndex && allCards[prevIndex]) {
+            allCards[prevIndex].classList.remove('next-img');
         }
+        if (allCards.length === 1 && allCards[0]) {
+            allCards[0].classList.remove('prev-img', 'next-img');
+        }
+
+        // Removed old caption update logic for #carousel-caption
     }
 
     function stopAutoSlide() {
@@ -173,22 +176,15 @@ document.addEventListener('DOMContentLoaded', () => {
         autoSlideIntervalId = setInterval(nextImage, autoSlideDelay);
     }
 
-    // Initialization
     if (imagePaths.length > 0 && imagePaths.length === imageCaptions.length && filmstripElement && viewportElement) {
         populateFilmstrip();
-        // Call slideTo AFTER images are loaded or use a window.onload or image.onload listener
-        // For simplicity now, assuming images have dimensions quickly.
-        // A slight delay or ResizeObserver might be needed for robust offsetWidth/offsetLeft reading
 
-        // Initial slide without transition to set start position correctly
         const initialTransform = filmstripElement.style.transition;
         filmstripElement.style.transition = 'none';
         slideTo(currentImageIndex);
 
-        // Force reflow/repaint before re-enabling transition
-        filmstripElement.offsetHeight; //offsetHeight read
+        filmstripElement.offsetHeight;
         filmstripElement.style.transition = initialTransform;
-
 
         if (prevButtonElement && nextButtonElement) {
             prevButtonElement.addEventListener('click', () => prevImage(true));
@@ -205,18 +201,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         startAutoSlide();
 
-        // Optional: Recalculate on window resize
         window.addEventListener('resize', () => {
             const tempTransition = filmstripElement.style.transition;
-            filmstripElement.style.transition = 'none'; // Disable transition during resize adjustment
+            filmstripElement.style.transition = 'none';
             slideTo(currentImageIndex);
-            filmstripElement.offsetHeight; // Force reflow
-            filmstripElement.style.transition = tempTransition; // Restore transition
+            filmstripElement.offsetHeight;
+            filmstripElement.style.transition = tempTransition;
         });
 
     } else {
         console.error("Carousel cannot start: Missing elements, or imagePaths/imageCaptions length mismatch or empty.");
-        if (captionElement) captionElement.textContent = "Erro ao carregar o carrossel.";
+        // if (captionElement) captionElement.textContent = "Erro ao carregar o carrossel."; // Old caption
     }
     // --- Carousel Code END ---
 });

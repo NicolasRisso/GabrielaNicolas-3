@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+html {
+    height: 100%;
+}
 
 /* Global Styles */
 * {
@@ -8,8 +12,8 @@
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300; /* Lighter default weight */
     font-size: 18px;
     background-color: #1a1228; /* Dark purple base */
     background-image:
@@ -20,16 +24,18 @@ body {
         /* Abstract Curves/Lines */
         linear-gradient(135deg, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
         linear-gradient(-45deg, rgba(255, 215, 0, 0.05) 10%, transparent 60%);
-    color: #f0e6ff; /* Light lavender default text */
-    line-height: 1.7;
+    color: #E0E0E0; /* Neutral light gray/off-white */
+    line-height: 1.6; /* Adjusted line height for Roboto */
+    min-height: 100vh; /* Ensure full viewport height */
+    background-attachment: fixed; /* Keep background fixed if content scrolls */
 }
 
 /* Color Palette Variables */
 :root {
     --primary-purple: #8A2BE2; /* BlueViolet */
     --primary-yellow: #FFD700; /* Gold */
-    --dark-text: #f0e6ff; /* Changed default dark text to light for dark mode */
-    --light-background: #1a1228; /* Changed default light background to dark */
+    --dark-text: #E0E0E0; /* Updated to neutral light gray */
+    --light-background: #1a1228;
 }
 
 /* Header Styling */
@@ -42,6 +48,7 @@ header {
 
 header::before {
     content: '💜';
+    color: var(--primary-purple); /* Explicit color */
     position: absolute;
     top: 10px;
     left: 20px;
@@ -51,6 +58,7 @@ header::before {
 }
 header::after {
     content: '💛';
+    color: var(--primary-yellow); /* Explicit color */
     position: absolute;
     top: 15px;
     right: 25px;
@@ -61,8 +69,13 @@ header::after {
 
 header h1 {
     font-size: 2.8em;
-    color: var(--primary-yellow); /* Gold for main title */
-    font-family: 'Great Vibes', 'Playfair Display', cursive;
+    /* color: var(--primary-yellow); -- REMOVED */
+    color: white; /* Main title color */
+    font-family: 'Roboto', sans-serif; /* Updated font */
+    font-weight: 700; /* Bold for main title */
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.7),
+                 0 0 10px rgba(255, 255, 255, 0.5),
+                 0 0 15px rgba(255, 255, 255, 0.3); /* Bloom effect */
     margin-bottom: 0.2em;
     text-align: center;
 }
@@ -73,14 +86,23 @@ header h1 {
 }
 
 #countdown-timer {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: var(--primary-purple); /* Purple text */
-    background-color: var(--primary-yellow); /* Gold background */
-    padding: 0.2em 0.4em;
-    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #E0E0E0;
+    background-color: transparent; /* Ensure transparent */
+    border: none; /* Ensure no border */
+    padding: 0;
+    border-radius: 0;
     display: inline-block;
     font-size: 1.1em;
+}
+
+.timer-number {
+    /* Bloom effect for numbers */
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.6),
+                 0 0 7px rgba(255, 255, 255, 0.4),
+                 0 0 10px rgba(255, 255, 255, 0.2);
+    /* Numbers can be slightly brighter if desired, e.g., color: white; */
 }
 
 /* Main Content/Carousel Styling */
@@ -106,25 +128,41 @@ main {
     margin: 0 auto;
     overflow: hidden;
     position: relative;
-    background-color: rgba(255, 255, 255, 0.05); /* Subtle light background for carousel area */
-    border: 1px solid var(--primary-yellow, #FFD700); /* Yellow border */
+    background-color: rgba(255, 255, 255, 0.05);
+    /* border: 1px solid var(--primary-yellow, #FFD700); -- REMOVED */
+    background-color: transparent; /* Viewport is just a clipper now */
 }
 
 .carousel-filmstrip {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    align-items: center; /* This was the line that was already present and causing diff issues */
+    align-items: center;
 }
 
-.carousel-img-item {
+.carousel-img-item { /* This is now the <figure> card */
     flex-shrink: 0;
     width: 60%;
     margin: 0 1.5%;
-    max-height: 400px;
-    object-fit: contain;
-    border: 2px solid var(--primary-yellow, #FFD700); /* Yellow image border */
-    border-radius: 8px;
+    /* max-height: 400px; -- REMOVED, determined by content */
+    /* object-fit: contain; -- REMOVED, applies to <img> */
+    /* border: none; -- REMOVED, glass border below */
+    /* display: block; -- REMOVED, flex item default is fine */
+
+    padding: 15px; /* Padding for the card */
+    background-color: rgba(255, 255, 255, 0.08); /* Glassmorphism background */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Glassmorphism border */
+    border-radius: 12px; /* Rounded corners for card */
+}
+
+.carousel-img-item img { /* Styling for the <img> tag inside the card */
+    max-width: 100%;
+    height: auto;
+    max-height: 380px; /* Adjust as needed */
     display: block;
+    margin: 0 auto 10px auto; /* Center image, margin below for caption */
+    border-radius: 8px; /* Optional rounded corners for image itself */
+    border: none; /* Ensure no residual border from previous rules */
 }
 
 .carousel-img-item.prev-img,
@@ -136,20 +174,21 @@ main {
     opacity: 1;
 }
 
-
-/* Caption Styling */
-.carousel-caption {
-    font-family: 'Playfair Display', serif;
-    font-weight: 400;
+/* New Caption Styling for text inside cards */
+.carousel-item-caption-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #D0D0D0; /* Light gray for caption text */
     text-align: center;
-    margin-top: 10px;
-    padding: 5px;
-    font-size: 0.95em;
-    color: #f5f5dc; /* Beige for caption text */
-    min-height: 1.5em;
-    font-style: italic;
-    margin-bottom: 15px;
+    font-size: 0.9em;
+    line-height: 1.4;
+    margin-top: 5px; /* Space between image and caption */
 }
+
+/* REMOVE Old .carousel-caption Styles */
+/*
+.carousel-caption { ... }
+*/
 
 /* #carousel-image ID is now one of the .carousel-img-item.
    Specific styling for the 'current' image can be done by adding a class like '.current-img' by JS.
@@ -172,38 +211,50 @@ main {
 }
 
 #prev-button, #next-button {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700; /* bold */
-    padding: 10px 15px;
-    font-size: 1em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    /* padding: 10px 15px; -- REMOVED/MODIFIED */
+    font-size: 2.5em; /* Larger for arrow characters */
     cursor: pointer;
-    background-color: var(--primary-yellow);
-    color: var(--primary-purple);
-    border: 1px solid var(--primary-purple);
-    border-radius: 5px;
-    margin: 0 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background: transparent;
+    color: white; /* Changed to white for more prominence */
+    border: none;
+    /* border-radius: 5px; -- REMOVED */
+    /* margin: 0 5px; -- REMOVED */
+    transition: color 0.3s ease; /* Only color transition */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px; /* Clickable area */
+}
+
+#prev-button {
+    left: 10px;
+}
+
+#next-button {
+    right: 10px;
 }
 
 #prev-button:hover, #next-button:hover {
-    background-color: var(--primary-purple);
-    color: var(--primary-yellow);
-    border: 1px solid var(--primary-yellow); /* Hover border matches text */
+    /* background-color: rgba(255,255,255,0.1); -- REMOVED */
+    color: var(--primary-yellow); /* Yellow on hover */
+    /* transform: translateY(-50%) scale(1.1); -- Optional scale */
 }
 
 
 /* Footer Styling */
 footer {
     text-align: center;
-    padding: 2em 0 1em; /* Adjusted padding */
-    /* background-color: #f0e6ff; -- REMOVED */
+    padding: 2em 0 1em;
     margin-top: 2em;
-    position: relative; /* For pseudo-element hearts */
-    border-top: 1px solid rgba(255, 215, 0, 0.2); /* Subtle separator */
+    position: relative;
+    /* border-top: 1px solid rgba(255, 215, 0, 0.2); -- REMOVED */
 }
 
 footer::before {
     content: '💛';
+    color: var(--primary-yellow); /* Explicit color */
     position: absolute;
     bottom: 10px;
     left: 30px;
@@ -213,6 +264,7 @@ footer::before {
 }
 footer::after {
     content: '💜';
+    color: var(--primary-purple); /* Explicit color */
     position: absolute;
     bottom: 15px;
     right: 35px;
@@ -222,10 +274,10 @@ footer::after {
 }
 
 footer p {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
+    font-family: 'Roboto', sans-serif; /* Updated font */
+    font-weight: 400; /* Regular */
     font-size: 1.2em;
-    color: var(--primary-yellow); /* Gold for footer message */
+    color: #E0E0E0;
 }
 
 /* Responsive Design */
