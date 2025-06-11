@@ -1,0 +1,145 @@
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Parisienne', cursive, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    background-color: #FFF8DC; /* Light yellow / Cornsilk */
+    color: #4B0082; /* Indigo / Dark Purple */
+    line-height: 1.6;
+}
+
+/* Color Palette Variables */
+:root {
+    --primary-purple: #8A2BE2; /* BlueViolet */
+    --primary-yellow: #FFD700; /* Gold */
+    --dark-text: #333;
+    --light-background: #FFF8DC;
+}
+
+/* Header Styling */
+header {
+    text-align: center;
+    padding: 2em 0;
+    background: linear-gradient(to bottom, #fff, #FFF8DC); /* Subtle gradient */
+}
+
+header h1 {
+    font-size: 2.8em;
+    color: var(--primary-purple);
+    font-family: 'Great Vibes', cursive, serif;
+    margin-bottom: 0.5em;
+}
+
+#countdown-timer {
+    font-weight: bold;
+    color: var(--primary-yellow);
+    background-color: var(--primary-purple);
+    padding: 0.2em 0.4em;
+    border-radius: 5px;
+}
+
+/* Main Content/Carousel Styling */
+main {
+    padding: 1em 0;
+}
+
+#photo-carousel {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1em;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center image and buttons */
+}
+
+#carousel-image {
+    display: block;
+    max-width: 100%;
+    max-height: 500px; /* Or a suitable height for your design */
+    margin: 10px auto; /* Center it and add some space */
+    border: 2px solid var(--primary-purple);
+    border-radius: 8px;
+    object-fit: contain; /* Or 'cover' depending on desired behavior */
+}
+
+#photo-carousel .nav-buttons {
+    margin-top: 10px;
+}
+
+#prev-button, #next-button {
+    padding: 10px 15px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: var(--primary-yellow);
+    color: var(--primary-purple);
+    border: 1px solid var(--primary-purple);
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#prev-button:hover, #next-button:hover {
+    background-color: var(--primary-purple);
+    color: var(--primary-yellow);
+}
+
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    padding: 2em 0;
+    background-color: #f0e6ff; /* Light lavender */
+    margin-top: 2em;
+}
+
+footer p {
+    font-size: 1.2em;
+    color: var(--primary-purple);
+    font-weight: bold;
+}
+
+/* Responsive Design */
+img { /* General responsive images */
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+
+    header h1 {
+        font-size: 2.2em;
+    }
+
+    #photo-carousel {
+        max-width: 95%;
+        padding: 0.5em;
+    }
+
+    #photo-carousel button {
+        padding: 0.7em 1em;
+        font-size: 0.9em;
+    }
+
+    footer p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+    #countdown-timer {
+        font-size: 0.9em;
+    }
+}
