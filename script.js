@@ -72,14 +72,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Carousel Code START ---
     const imagePaths = [
         'images/photo1.jpg', 'images/photo2.jpg', 'images/photo3.jpg', 'images/photo4.jpg', 'images/photo5.jpg',
-        'images/photo6.jpg', 'images/photo7.jpg', 'images/photo8.jpg', 'images/photo9.jpg', 'images/photo10.jpg'
+        'images/photo6.jpg', 'images/photo7.jpg', 'images/photo8.jpg', 'images/photo9.jpg', 'images/photo10.jpg',
+        'images/photo11.jpg', 'images/photo12.jpg'
     ];
 
     const imageCaptions = [
-        "Legenda da Foto 1: Nossos momentos...", "Legenda da Foto 2: Aventuras juntos!", "Legenda da Foto 3: Sorrisos e cumplicidade.",
-        "Legenda da Foto 4: Viagem inesquecível.", "Legenda da Foto 5: Celebrando o amor.", "Legenda da Foto 6: Detalhes que encantam.",
-        "Legenda da Foto 7: Olhar para o futuro.", "Legenda da Foto 8: Simplesmente feliz.", "Legenda da Foto 9: Colecionando memórias.",
-        "Legenda da Foto 10: Para sempre é só o começo."
+        "Nosso primeiro date <3", "Ibirapuera e Restaurante Medieval", "Role no Shopping 🥰",
+        "Passeio no MASP", "Show das Luzes no Jardim Botânico", "💛Dia que começamos a Namorar💜",
+        "Nossa primeira viagem juntos <3", "Mirante de Serra Negra", "TOKYO😶",
+        "Restaurante de Jogos", "Candlelight🕯️", "Nosso primeiro prato juntos🥰"
     ];
 
     const carouselElement = document.getElementById('photo-carousel');
