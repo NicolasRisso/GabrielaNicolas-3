@@ -327,9 +327,65 @@ img { /* General responsive images */
 
 @media (max-width: 480px) {
     header h1 {
-        font-size: 1.8em;
+        font-size: 1.6em;
     }
     #countdown-timer {
         font-size: 0.9em;
     }
+}
+
+#special-message-container {
+    text-align: center;
+    margin: 1em 0; /* Add some space around the message */
+}
+
+.special-date-message {
+    font-size: 1.3em; /* Make it a bit prominent */
+    color: #FFD700; /* Gold color, or choose another */
+    font-weight: bold;
+    /* Optional: Add a subtle text shadow like the header */
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+#love-message {
+   text-align: center;
+   /* margin-top: 1em; /* Add some space if needed */
+   /* font-size: 1.2em; /* Inherits from footer p or body, adjust if needed */
+   /* color: #E0E0E0; /* Inherits from footer p or body, adjust if needed */
+}
+
+.secret-textbox-container {
+    text-align: center; /* Center the textarea block */
+    margin: 1.5em 0; /* Add some space around the textarea */
+}
+
+#secret-textbox {
+    width: 80%; /* Or a fixed width like 300px, adjust as needed */
+    max-width: 500px; /* Maximum width */
+    min-height: 100px; /* Decent starting height */
+    padding: 15px;
+    border-radius: 10px; /* Rounded corners */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for the glass effect */
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    backdrop-filter: blur(8px) brightness(1.2); /* Blur and slight bloom (brightness) */
+    -webkit-backdrop-filter: blur(8px) brightness(1.2); /* Safari support */
+    color: #E0E0E0; /* Text color inside textarea */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2), /* Outer bloom */
+                0 0 25px rgba(255, 255, 255, 0.1); /* Wider, softer bloom */
+    transition: all 0.3s ease; /* Smooth transition for focus effects */
+}
+
+#secret-textbox::placeholder {
+    color: #B0B0B0; /* Lighter color for placeholder */
+    opacity: 0.8;
+}
+
+#secret-textbox:focus {
+    outline: none;
+    border-color: rgba(255, 215, 0, 0.7); /* Gold border on focus */
+    background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque on focus */
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), /* Gold bloom on focus */
+                0 0 30px rgba(255, 215, 0, 0.2);
 }

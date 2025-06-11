@@ -56,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minStr = `<span class="timer-number">${m}</span>m`;
                 const secStr = `<span class="timer-number">${s}</span>s`;
 
-                let timerDisplayString = [monthStr, dayStr, hourStr, minStr, secStr].join(', ');
+                let timerDisplayString = monthStr + ", " + dayStr + ", " + hourStr + ", " + minStr + " e " + secStr + ".";
 
-                countdownTimerElement.innerHTML = "Feliz " + timerDisplayString;
+                countdownTimerElement.innerHTML = timerDisplayString;
             }
         }
     }
@@ -217,4 +217,31 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Carousel cannot start: Missing elements, or imagePaths/imageCaptions length mismatch or empty.");
     }
     // --- Carousel Code END ---
+
+    function displaySpecialDateMessage() {
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth() + 1; // JavaScript months are 0-indexed
+        const messageContainer = document.getElementById('special-message-container');
+
+        if (!messageContainer) return;
+
+        let message = '';
+        if (month === 6 && day === 12) { // June 12th
+            message = '💜Feliz Dia dos Namorados💛';
+        } else if (month === 5 && day === 19) { // May 19th
+            message = '💜Feliz Aniversário Gabi, meu Amor💛';
+        } else if (month === 11 && day === 26) { // November 26th
+            message = '💜Feliz Aniversário para mim🥰💛';
+        }
+
+        if (message) {
+            const messageElement = document.createElement('p');
+            messageElement.className = 'special-date-message';
+            messageElement.innerHTML = message; // Use innerHTML to render emojis correctly
+            messageContainer.appendChild(messageElement);
+        }
+    }
+
+    displaySpecialDateMessage(); // Call the function to check and display the message on page load
 });
