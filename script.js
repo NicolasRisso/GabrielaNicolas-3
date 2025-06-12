@@ -298,68 +298,131 @@ document.addEventListener('DOMContentLoaded', () => {
             const trimmedRawValue = rawValue.trim();
             const sanitizedValue = sanitizeTextForMatching(rawValue);
 
-            let messageForContainer = ''; // Holds the message to be displayed
+            // --- Step 1: Carousel Management ---
+            // THIS SECTION REMAINS UNCHANGED by this specific subtask
+            if (trimmedRawValue === "22") {
+                if (!secretImageAdded) {
+                    if (typeof stopAutoSlide === 'function') stopAutoSlide();
+                    if (Array.isArray(imagePaths) && Array.isArray(imageCaptions) && typeof currentImageIndex !== 'undefined') {
+                        const bolsonaroCaption = brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark;
+                        imagePaths.unshift('images/photo_secret_22.jpg');
+                        imageCaptions.unshift(bolsonaroCaption);
+                        secretImageAdded = true;
+                        currentImageIndex = 0;
+                        if (typeof populateFilmstrip === 'function') populateFilmstrip();
+                        if (typeof slideTo === 'function' && filmstripElement) {
+                            const initialTransform = filmstripElement.style.transition;
+                            filmstripElement.style.transition = 'none';
+                            slideTo(currentImageIndex);
+                            filmstripElement.offsetHeight;
+                            filmstripElement.style.transition = initialTransform;
+                        }
+                        if (typeof startAutoSlide === 'function') startAutoSlide();
+                    }
+                }
+            } else { // Input is NOT "22", so check if secret image should be removed
+                if (secretImageAdded) { // Only remove if present
+                    const secretImagePath = 'images/photo_secret_22.jpg';
+                    const indexToRemove = imagePaths.indexOf(secretImagePath);
+                    if (indexToRemove !== -1) { // If the secret image is found
+                        if (typeof stopAutoSlide === 'function') stopAutoSlide();
 
-            // Priority: 1. "Te amo mais", 2. "Te amo", 3. Birthdays
+                        imagePaths.splice(indexToRemove, 1);
+                        imageCaptions.splice(indexToRemove, 1);
+                        secretImageAdded = false; // Reset flag
+
+                        if (typeof populateFilmstrip === 'function') populateFilmstrip();
+
+                        // Adjust currentImageIndex carefully after removal
+                        if (imagePaths.length === 0) {
+                            currentImageIndex = 0;
+                        } else {
+                            // Ensure currentImageIndex is within the new bounds
+                            if (currentImageIndex >= imagePaths.length) {
+                                currentImageIndex = imagePaths.length - 1;
+                            }
+                            currentImageIndex = Math.max(0, Math.min(currentImageIndex, imagePaths.length - 1));
+                        }
+
+                        if (typeof slideTo === 'function' && filmstripElement) {
+                            const initialTransform = filmstripElement.style.transition;
+                            filmstripElement.style.transition = 'none';
+                            slideTo(currentImageIndex);
+                            filmstripElement.offsetHeight;
+                            filmstripElement.style.transition = initialTransform;
+                        }
+                        if (typeof startAutoSlide === 'function' && imagePaths.length > 0) {
+                            startAutoSlide();
+                        }
+                    }
+                }
+            }
+
+            // --- Step 2: Message Processing Logic ---
+            // Theme Change Logic
+            if (trimmedRawValue.toLowerCase() === "claro") {
+                document.body.classList.add('light-theme');
+                // Optionally, clear messageForContainer or set a theme-changed message
+                // For now, it allows other messages to also appear e.g. "claro te amo"
+            } else if (trimmedRawValue.toLowerCase() === "escuro") { // Added condition for "escuro"
+                document.body.classList.remove('light-theme');
+                // Optional: if (!messageForContainer) messageForContainer = "Tema escuro restaurado!";
+            }
+
+            let messageForContainer = '';
             if (sanitizedValue.includes("teamomais")) {
                 messageForContainer = "Aaaa não meu amor" + smilingFaceWithHearts + " Eu que te amo muitoo mais" + purpleHeart + yellowHeart;
             } else if (sanitizedValue.includes("teamo")) {
                 messageForContainer = "Eu também te amo muito!" + smilingFaceWithHearts + purpleHeart;
+            } else if (sanitizedValue.includes("meioquedivou") || sanitizedValue.includes("meioquedivamos") || sanitizedValue.includes("meioquedivei")) {
+                messageForContainer = "Meio que divamos muitoo né meu amor" + smilingFaceWithHearts;
             } else if (trimmedRawValue === "1905" || trimmedRawValue === "19/05") {
                 messageForContainer = purpleHeart + "Feliz Aniversário Gabi, meu Amor" + yellowHeart;
             } else if (trimmedRawValue === "2611" || trimmedRawValue === "26/11") {
                 messageForContainer = purpleHeart + "Feliz Aniversário para mim" + smilingFaceWithHearts + yellowHeart;
             }
 
+            // Update Message Container based on messageForContainer or default
             if (messageForContainer) {
                 messageContainer.innerHTML = '';
                 const messageElement = document.createElement('p');
-                messageElement.className = 'special-date-message'; // Set base class
+                messageElement.className = 'special-date-message';
 
-                // Add random color logic HERE:
-                const randomNumber = Math.random() * 100; // 0 to 99.99...
-                if (randomNumber < 2) { // 2% chance for yellow
-                    messageElement.classList.add('message-yellow');
-                } else if (randomNumber < 4) { // Next 2% chance for purple (total 4%)
-                    messageElement.classList.add('message-purple');
-                }
-                // Else, no additional class is added, so it uses the base .special-date-message color (white).
+                const randomNumber = Math.random() * 100;
+                if (randomNumber < 2) { messageElement.classList.add('message-yellow'); }
+                else if (randomNumber < 4) { messageElement.classList.add('message-purple'); }
 
                 messageElement.innerHTML = messageForContainer;
                 messageContainer.appendChild(messageElement);
-            } else if (trimmedRawValue === "22" && !secretImageAdded) {
-                // Handle "22" Carousel Trigger
-                if (typeof stopAutoSlide === 'function') stopAutoSlide();
-                if (Array.isArray(imagePaths) && Array.isArray(imageCaptions) && typeof currentImageIndex !== 'undefined') {
-                    imagePaths.unshift('images/photo_secret_22.jpg');
-                    const bolsonaroCaption = brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark;
-                    imageCaptions.unshift(bolsonaroCaption);
-                    secretImageAdded = true;
-                    currentImageIndex = 0;
-                    if (typeof populateFilmstrip === 'function') populateFilmstrip();
-                    if (typeof slideTo === 'function' && filmstripElement) {
-                        const initialTransform = filmstripElement.style.transition;
-                        filmstripElement.style.transition = 'none';
-                        slideTo(currentImageIndex);
-                        filmstripElement.offsetHeight;
-                        filmstripElement.style.transition = initialTransform;
-                    }
-                    if (typeof startAutoSlide === 'function') startAutoSlide();
-                }
-                messageContainer.innerHTML = '';
-                if (typeof displaySpecialDateMessage === 'function') {
-                    displaySpecialDateMessage();
-                }
             } else {
-                // Default: No specific trigger, reset to default date-based message
                 messageContainer.innerHTML = '';
                 if (typeof displaySpecialDateMessage === 'function') {
                     displaySpecialDateMessage();
                 }
             }
 
-            // Clear the textbox after processing, if desired
+            // Optional: Clear textbox after processing
             // secretTextbox.value = "";
+        });
+    }
+
+    if (sendSecretCodeButton) {
+        sendSecretCodeButton.addEventListener('mouseenter', () => {
+            // Always remove previous color classes first to reset
+            sendSecretCodeButton.classList.remove('hover-yellow', 'hover-purple');
+
+            const randomNumber = Math.random() * 100;
+            if (randomNumber < 2) { // 2% chance
+                sendSecretCodeButton.classList.add('hover-yellow');
+            } else if (randomNumber < 4) { // Next 2% chance
+                sendSecretCodeButton.classList.add('hover-purple');
+            }
+            // If no class is added, the default CSS :hover style will apply
+        });
+
+        sendSecretCodeButton.addEventListener('mouseleave', () => {
+            // Remove classes on mouse leave to ensure the button is reset for the next hover
+            sendSecretCodeButton.classList.remove('hover-yellow', 'hover-purple');
         });
     }
 });

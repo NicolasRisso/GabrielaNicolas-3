@@ -424,8 +424,23 @@ img { /* General responsive images */
 }
 
 #send-secret-code-button:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); /* Gold hover bloom */
+    background-color: rgba(255, 255, 255, 0.20); /* Default: Slightly brighter white */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* Default: White bloom */
+    /* color: white; /* Ensure text color is appropriate if not inherited */
+}
+
+#send-secret-code-button.hover-yellow:hover {
+    background-color: rgba(255, 215, 0, 0.2);  /* Yellowish background tint */
+    border-color: rgba(255, 215, 0, 0.5);     /* Optional: Tint border */
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5),
+                0 0 30px rgba(255, 215, 0, 0.3); /* Gold/Yellow bloom */
+}
+
+#send-secret-code-button.hover-purple:hover {
+    background-color: rgba(138, 43, 226, 0.2); /* Purplish background tint */
+    border-color: rgba(138, 43, 226, 0.5);    /* Optional: Tint border */
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.5),
+                0 0 30px rgba(138, 43, 226, 0.3); /* Purple bloom */
 }
 
 #secret-textbox::placeholder {
@@ -447,4 +462,106 @@ img { /* General responsive images */
     background-color: rgba(255, 255, 255, 0.15); /* Keep background consistent or make it slightly purple-tinted if desired */
     box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), /* Purple bloom */
                 0 0 30px rgba(138, 43, 226, 0.2);
+}
+
+/* --- Light Theme --- */
+body.light-theme {
+    background-color: #F0F0F0; /* Light gray background */
+    background-image: none;    /* Remove dark theme gradients */
+    color: #333333;           /* Darker text for readability */
+}
+
+body.light-theme header h1 {
+    color: #222222;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+body.light-theme #countdown-timer {
+    color: #444444;
+}
+body.light-theme .timer-number {
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Darker shadow for light bg */
+}
+
+body.light-theme .carousel-item-caption-text {
+    color: #555555;
+}
+
+body.light-theme #prev-button,
+body.light-theme #next-button {
+    color: #333333;
+}
+body.light-theme #prev-button:hover,
+body.light-theme #next-button:hover {
+    color: var(--primary-purple); /* Or another suitable dark color */
+}
+
+/* Messages in light theme */
+body.light-theme #special-message-container .special-date-message {
+    color: #333333; /* Default message color */
+    text-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+body.light-theme #special-message-container .special-date-message.message-yellow {
+    color: #B38600; /* Darker yellow, more contrast on light bg */
+}
+body.light-theme #special-message-container .special-date-message.message-purple {
+    color: #6A1B9A; /* Darker purple, more contrast on light bg */
+}
+
+/* Textbox and Button in light theme */
+body.light-theme #secret-textbox {
+    background-color: rgba(255, 255, 255, 0.85); /* More opaque white */
+    border-color: rgba(0, 0, 0, 0.25);
+    color: #333333;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+body.light-theme #secret-textbox::placeholder {
+    color: #888888;
+}
+body.light-theme #secret-textbox:focus.focus-yellow {
+    border-color: rgba(255, 193, 7, 0.8); /* Material Design Amber 700 */
+    background-color: #FFFFFF;
+    box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+}
+body.light-theme #secret-textbox:focus.focus-purple {
+    border-color: rgba(123, 31, 162, 0.8); /* Material Design Purple 700 */
+    background-color: #FFFFFF;
+    box-shadow: 0 0 12px rgba(123, 31, 162, 0.3);
+}
+
+body.light-theme #send-secret-code-button {
+    background-color: rgba(224, 224, 224, 0.85); /* Light gray button */
+    border-color: rgba(0, 0, 0, 0.25);
+    color: #333333;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+body.light-theme #send-secret-code-button:hover { /* Default light theme hover */
+    background-color: rgba(200, 200, 200, 0.9);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+}
+body.light-theme #send-secret-code-button.hover-yellow:hover {
+    background-color: rgba(255, 215, 0, 0.4); /* Lighter yellow for light theme */
+    border-color: rgba(255, 215, 0, 0.7);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+body.light-theme #send-secret-code-button.hover-purple:hover {
+    background-color: rgba(138, 43, 226, 0.3); /* Lighter purple for light theme */
+    border-color: rgba(138, 43, 226, 0.7);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+
+body.light-theme #love-message {
+    color: #444444;
+}
+
+body.light-theme footer {
+    background-color: #E0E0E0; /* Lighter footer bg */
+    /* border-top: 1px solid #CCCCCC; */ /* Optional border */
+}
+body.light-theme footer p {
+    color: #333333;
+}
+body.light-theme footer::before,
+body.light-theme footer::after {
+    opacity: 0.7; /* Hearts might need more opacity on light bg */
 }
