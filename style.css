@@ -255,8 +255,21 @@ main {
 
 #prev-button:hover, #next-button:hover {
     /* background-color: rgba(255,255,255,0.1); -- REMOVED */
-    color: var(--primary-yellow); /* Yellow on hover */
+    /* color: var(--primary-yellow); -- REMOVED as per new requirement */
     /* transform: translateY(-50%) scale(1.1); -- Optional scale */
+}
+
+/* New Arrow Color Classes */
+.arrow-white {
+    color: white;
+}
+
+.arrow-purple {
+    color: var(--primary-purple);
+}
+
+.arrow-yellow {
+    color: var(--primary-yellow);
 }
 
 

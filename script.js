@@ -219,6 +219,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- Carousel Code END ---
 
+    // --- Carousel Arrow Color Dynamics START ---
+    if (prevButtonElement && nextButtonElement) {
+        const arrowColorClasses = ['arrow-white', 'arrow-purple', 'arrow-yellow'];
+
+        const applyRandomArrowColor = (buttonElement) => {
+            // Remove any existing color classes
+            arrowColorClasses.forEach(cls => buttonElement.classList.remove(cls));
+
+            const randomNumber = Math.random(); // Random number between 0 and 1
+
+            if (randomNumber < 0.02) { // 2% chance
+                buttonElement.classList.add('arrow-yellow');
+            } else if (randomNumber < 0.04) { // Next 2% chance (total 4%)
+                buttonElement.classList.add('arrow-purple');
+            } else { // 96% chance
+                buttonElement.classList.add('arrow-white');
+            }
+        };
+
+        const removeArrowColors = (buttonElement) => {
+            arrowColorClasses.forEach(cls => buttonElement.classList.remove(cls));
+            // Default color (white) is set by base CSS, so removing classes is enough
+            // to revert, unless a specific "default" class is desired here.
+            // For now, we ensure it has one of the dynamic classes on hover/click,
+            // and none on mouseleave, relying on base CSS.
+        };
+
+        // Event listeners for Previous Button
+        prevButtonElement.addEventListener('mouseenter', () => applyRandomArrowColor(prevButtonElement));
+        prevButtonElement.addEventListener('click', () => applyRandomArrowColor(prevButtonElement));
+        prevButtonElement.addEventListener('mouseleave', () => removeArrowColors(prevButtonElement));
+
+        // Event listeners for Next Button
+        nextButtonElement.addEventListener('mouseenter', () => applyRandomArrowColor(nextButtonElement));
+        nextButtonElement.addEventListener('click', () => applyRandomArrowColor(nextButtonElement));
+        nextButtonElement.addEventListener('mouseleave', () => removeArrowColors(nextButtonElement));
+    }
+    // --- Carousel Arrow Color Dynamics END ---
+
     function sanitizeTextForMatching(text) {
         if (typeof text !== 'string') return '';
         // Regex for emoji removal (using a range that covers many emojis)
