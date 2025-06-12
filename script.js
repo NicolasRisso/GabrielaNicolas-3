@@ -252,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             messageContainer.appendChild(messageElement);
         }
     }
+    
 
     displaySpecialDateMessage(); // Call the function to check and display the message on page load
 
@@ -292,6 +293,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sendSecretCodeButton = document.getElementById('send-secret-code-button');
 
+    // Add keydown listener for 'Enter' key on textarea
+    if (secretTextbox && sendSecretCodeButton) {
+        secretTextbox.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendSecretCodeButton.click();
+            }
+        });
+    }
+    
     if (sendSecretCodeButton && secretTextbox && messageContainer) {
         sendSecretCodeButton.addEventListener('click', () => {
             const rawValue = secretTextbox.value;
