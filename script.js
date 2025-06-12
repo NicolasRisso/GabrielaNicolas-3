@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (timeUntilStart > 1000) {
                     let message = "Contando os segundos para: ";
                     if (daysUntil > 0) {
-                        message += `<span class="timer-number">${daysUntil}</span>dia${daysUntil !== 1 ? 's' : ''} `;
+                        message += `<span class="timer-number">${daysUntil}</span>dia${daysUntil !== 1 ? 's' : ''}, `;
                     }
-                    message += `<span class="timer-number">${hoursUntil}</span>h <span class="timer-number">${minutesUntil}</span>m <span class="timer-number">${secondsUntil}</span>s!`;
+                    message += `<span class="timer-number">${hoursUntil}</span>horas, <span class="timer-number">${minutesUntil}</span>minutos e <span class="timer-number">${secondsUntil}</span>segundos!`;
                     countdownTimerElement.innerHTML = message;
                 } else {
                     countdownTimerElement.innerHTML = "Feliz Dia dos Namorados!";
@@ -52,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (countdownTimerElement) {
                 const monthStr = `<span class="timer-number">${months}</span> mes${months !== 1 ? 'es' : ''}`;
                 const dayStr = `<span class="timer-number">${days}</span> dia${days !== 1 ? 's' : ''}`;
-                const hourStr = `<span class="timer-number">${h}</span>h`;
-                const minStr = `<span class="timer-number">${m}</span>m`;
-                const secStr = `<span class="timer-number">${s}</span>s`;
+                const hourStr = `<span class="timer-number">${h}</span> horas`;
+                const minStr = `<span class="timer-number">${m}</span> minutos`;
+                const secStr = `<span class="timer-number">${s}</span> segundos`;
 
-                let timerDisplayString = monthStr + ", " + dayStr + ", " + hourStr + ", " + minStr + " e " + secStr + ".";
+                let timerDisplayString =  monthStr + ", " + dayStr + ", " + hourStr + ", " + minStr + " e " + secStr + "!";
 
                 countdownTimerElement.innerHTML = timerDisplayString;
             }
@@ -300,11 +300,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- Step 1: Carousel Management ---
             // THIS SECTION REMAINS UNCHANGED by this specific subtask
-            if (trimmedRawValue === "22") {
+            if (trimmedRawValue === "22" || trimmedRawValue.toLowerCase() === "bolsonaro") {
                 if (!secretImageAdded) {
                     if (typeof stopAutoSlide === 'function') stopAutoSlide();
                     if (Array.isArray(imagePaths) && Array.isArray(imageCaptions) && typeof currentImageIndex !== 'undefined') {
-                        const bolsonaroCaption = brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark;
+                        const bolsonaroCaption =  digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + digitTwoEmoji + digitTwoEmoji + checkMark;
                         imagePaths.unshift('images/photo_secret_22.jpg');
                         imageCaptions.unshift(bolsonaroCaption);
                         secretImageAdded = true;
@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sanitizedValue.includes("teamomais")) {
                 messageForContainer = "Aaaa não meu amor" + smilingFaceWithHearts + " Eu que te amo muitoo mais" + purpleHeart + yellowHeart;
             } else if (sanitizedValue.includes("teamo")) {
-                messageForContainer = "Eu também te amo muito!" + smilingFaceWithHearts + purpleHeart;
+                messageForContainer = "Eu também te amo meu amor" + smilingFaceWithHearts + purpleHeart + yellowHeart;
             } else if (sanitizedValue.includes("meioquedivou") || sanitizedValue.includes("meioquedivamos") || sanitizedValue.includes("meioquedivei")) {
                 messageForContainer = "Meio que divamos muitoo né meu amor" + smilingFaceWithHearts;
             } else if (trimmedRawValue === "1905" || trimmedRawValue === "19/05") {
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Optional: Clear textbox after processing
-            // secretTextbox.value = "";
+            secretTextbox.value = "";
         });
     }
 
