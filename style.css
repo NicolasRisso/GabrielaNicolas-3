@@ -28,6 +28,8 @@ body {
     line-height: 1.6; /* Adjusted line height for Roboto */
     min-height: 100vh; /* Ensure full viewport height */
     background-attachment: fixed; /* Keep background fixed if content scrolls */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Color Palette Variables */
@@ -94,7 +96,7 @@ header h1 {
     padding: 0;
     border-radius: 0;
     display: inline-block;
-    font-size: 1.25em; /* Increased font size */
+    font-size: 1.4em; /* Increased font size */
 }
 
 .timer-number {
@@ -261,27 +263,28 @@ main {
 /* Footer Styling */
 footer {
     text-align: center;
-    padding: 2em 0 1em;
-    margin-top: 2em;
+    padding: 2em 0 1.5em; /* Slightly increased bottom padding for hearts */
+    margin-top: auto; /* This is key for sticky footer */
     position: relative;
-    /* border-top: 1px solid rgba(255, 215, 0, 0.2); -- REMOVED */
+    background-color: rgba(0, 0, 0, 0.2); /* Darker background - adjust alpha as needed */
+    /* border-top: 1px solid rgba(255, 215, 0, 0.1); /* Optional subtle top border */
 }
 
 footer::before {
-    content: '💛';
-    color: var(--primary-yellow); /* Explicit color */
+    content: '💛'; /* yellowHeart */
+    color: var(--primary-yellow);
     position: absolute;
-    bottom: 10px;
+    bottom: 20px; /* Increased from 10px */
     left: 30px;
     font-size: 1.8em;
     opacity: 0.4;
     transform: rotate(20deg);
 }
 footer::after {
-    content: '💜';
-    color: var(--primary-purple); /* Explicit color */
+    content: '💜'; /* purpleHeart */
+    color: var(--primary-purple);
     position: absolute;
-    bottom: 15px;
+    bottom: 25px; /* Increased from 15px */
     right: 35px;
     font-size: 2em;
     opacity: 0.4;
@@ -327,9 +330,238 @@ img { /* General responsive images */
 
 @media (max-width: 480px) {
     header h1 {
-        font-size: 1.8em;
+        font-size: 1.6em;
     }
     #countdown-timer {
         font-size: 0.9em;
     }
+}
+
+#special-message-container {
+    text-align: center;
+    margin: 1em 0; /* Add some space around the message */
+}
+
+.special-date-message {
+    font-size: 1.3em;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Existing shadow, can keep or adjust */
+    color: white; /* Changed from #FFD700 to white */
+}
+
+.special-date-message.message-yellow {
+    color: #FFD700; /* Gold/Yellow - var(--primary-yellow) could also be used */
+}
+
+.special-date-message.message-purple {
+    color: #8A2BE2; /* BlueViolet/Purple - var(--primary-purple) could also be used */
+}
+
+#love-message {
+   text-align: center;
+   /* margin-top: 1em; /* Add some space if needed */
+   /* font-size: 1.2em; /* Inherits from footer p or body, adjust if needed */
+   /* color: #E0E0E0; /* Inherits from footer p or body, adjust if needed */
+}
+
+.secret-textbox-container {
+    /* text-align: center; /* No longer needed if wrapper is margin: auto */
+    margin: 1.5em 0;
+}
+
+.input-with-button-wrapper {
+    display: flex;
+    align-items: stretch; /* Make items same height */
+    width: 80%; /* Or match #secret-textbox's width approach */
+    max-width: 560px; /* Adjust to accommodate button */
+    margin: 0 auto; /* Center the wrapper */
+}
+
+#secret-textbox {
+    flex-grow: 1; /* Textarea takes available space */
+    /* Keep existing width/max-width if not using wrapper's width, or set to 100% of flex item */
+    /* Remove margin if handled by wrapper or button */
+    min-height: 100px; /* Decent starting height */
+    padding: 15px;
+    /* border-radius: 10px; /* Rounded corners - adjusted for button */
+    border-top-right-radius: 0;    /* For seamless connection */
+    border-bottom-right-radius: 0; /* For seamless connection */
+    border-top-left-radius: 10px; /* Keep original radius */
+    border-bottom-left-radius: 10px; /* Keep original radius */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for the glass effect */
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    backdrop-filter: blur(8px) brightness(1.2); /* Blur and slight bloom (brightness) */
+    -webkit-backdrop-filter: blur(8px) brightness(1.2); /* Safari support */
+    color: #E0E0E0; /* Text color inside textarea */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2), /* Outer bloom */
+                0 0 25px rgba(255, 255, 255, 0.1); /* Wider, softer bloom */
+    transition: all 0.3s ease; /* Smooth transition for focus effects */
+    /* Ensure existing margin is removed or adjusted if needed for flex wrapper */
+    margin: 0; /* Remove individual margin if wrapper handles it */
+    resize: none;
+}
+
+#send-secret-code-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px) brightness(1.2);
+    -webkit-backdrop-filter: blur(8px) brightness(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: none; /* Seamless connection */
+    color: #E0E0E0;
+    padding: 15px; /* Match textbox padding for height consistency */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 10px;  /* Match textbox overall radius */
+    border-bottom-right-radius: 10px; /* Match textbox overall radius */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); /* Softer bloom than textbox focus */
+    transition: all 0.3s ease;
+    margin-left: -1px; /* Overlap border slightly for seamless look */
+}
+
+#send-secret-code-button:hover {
+    background-color: rgba(255, 255, 255, 0.20); /* Default: Slightly brighter white */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* Default: White bloom */
+    /* color: white; /* Ensure text color is appropriate if not inherited */
+}
+
+#send-secret-code-button.hover-yellow:hover {
+    background-color: rgba(255, 215, 0, 0.2);  /* Yellowish background tint */
+    border-color: rgba(255, 215, 0, 0.5);     /* Optional: Tint border */
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5),
+                0 0 30px rgba(255, 215, 0, 0.3); /* Gold/Yellow bloom */
+}
+
+#send-secret-code-button.hover-purple:hover {
+    background-color: rgba(138, 43, 226, 0.2); /* Purplish background tint */
+    border-color: rgba(138, 43, 226, 0.5);    /* Optional: Tint border */
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.5),
+                0 0 30px rgba(138, 43, 226, 0.3); /* Purple bloom */
+}
+
+#secret-textbox::placeholder {
+    color: #B0B0B0; /* Lighter color for placeholder */
+    opacity: 0.8;
+}
+
+#secret-textbox:focus.focus-yellow {
+    outline: none;
+    border-color: rgba(255, 215, 0, 0.7); /* Gold/Yellow border */
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), /* Gold/Yellow bloom */
+                0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+#secret-textbox:focus.focus-purple {
+    outline: none;
+    border-color: rgba(138, 43, 226, 0.7); /* Purple border */
+    background-color: rgba(255, 255, 255, 0.15); /* Keep background consistent or make it slightly purple-tinted if desired */
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), /* Purple bloom */
+                0 0 30px rgba(138, 43, 226, 0.2);
+}
+
+/* --- Light Theme --- */
+body.light-theme {
+    background-color: #F0F0F0; /* Light gray background */
+    background-image: none;    /* Remove dark theme gradients */
+    color: #333333;           /* Darker text for readability */
+}
+
+body.light-theme header h1 {
+    color: #222222;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+body.light-theme #countdown-timer {
+    color: #444444;
+}
+body.light-theme .timer-number {
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Darker shadow for light bg */
+}
+
+body.light-theme .carousel-item-caption-text {
+    color: #555555;
+}
+
+body.light-theme #prev-button,
+body.light-theme #next-button {
+    color: #333333;
+}
+body.light-theme #prev-button:hover,
+body.light-theme #next-button:hover {
+    color: var(--primary-purple); /* Or another suitable dark color */
+}
+
+/* Messages in light theme */
+body.light-theme #special-message-container .special-date-message {
+    color: #333333; /* Default message color */
+    text-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+body.light-theme #special-message-container .special-date-message.message-yellow {
+    color: #B38600; /* Darker yellow, more contrast on light bg */
+}
+body.light-theme #special-message-container .special-date-message.message-purple {
+    color: #6A1B9A; /* Darker purple, more contrast on light bg */
+}
+
+/* Textbox and Button in light theme */
+body.light-theme #secret-textbox {
+    background-color: rgba(255, 255, 255, 0.85); /* More opaque white */
+    border-color: rgba(0, 0, 0, 0.25);
+    color: #333333;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+body.light-theme #secret-textbox::placeholder {
+    color: #888888;
+}
+body.light-theme #secret-textbox:focus.focus-yellow {
+    border-color: rgba(255, 193, 7, 0.8); /* Material Design Amber 700 */
+    background-color: #FFFFFF;
+    box-shadow: 0 0 12px rgba(255, 193, 7, 0.3);
+}
+body.light-theme #secret-textbox:focus.focus-purple {
+    border-color: rgba(123, 31, 162, 0.8); /* Material Design Purple 700 */
+    background-color: #FFFFFF;
+    box-shadow: 0 0 12px rgba(123, 31, 162, 0.3);
+}
+
+body.light-theme #send-secret-code-button {
+    background-color: rgba(224, 224, 224, 0.85); /* Light gray button */
+    border-color: rgba(0, 0, 0, 0.25);
+    color: #333333;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+body.light-theme #send-secret-code-button:hover { /* Default light theme hover */
+    background-color: rgba(200, 200, 200, 0.9);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+}
+body.light-theme #send-secret-code-button.hover-yellow:hover {
+    background-color: rgba(255, 215, 0, 0.4); /* Lighter yellow for light theme */
+    border-color: rgba(255, 215, 0, 0.7);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+body.light-theme #send-secret-code-button.hover-purple:hover {
+    background-color: rgba(138, 43, 226, 0.3); /* Lighter purple for light theme */
+    border-color: rgba(138, 43, 226, 0.7);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+
+body.light-theme #love-message {
+    color: #444444;
+}
+
+body.light-theme footer {
+    background-color: #E0E0E0; /* Lighter footer bg */
+    /* border-top: 1px solid #CCCCCC; */ /* Optional border */
+}
+body.light-theme footer p {
+    color: #333333;
+}
+body.light-theme footer::before,
+body.light-theme footer::after {
+    opacity: 0.7; /* Hearts might need more opacity on light bg */
 }
