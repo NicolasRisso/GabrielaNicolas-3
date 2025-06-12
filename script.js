@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Timer Code START ---
-    const targetDate = new Date('2025-02-02T16:45:00');
+    const targetDate = new Date(2025, 1, 2, 16, 45, 0);
     const countdownTimerElement = document.getElementById('countdown-timer');
 
     function updateTimer() {
@@ -34,9 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const m = Math.floor((timeSinceTargetMs / (1000 * 60)) % 60);
             const h = Math.floor((timeSinceTargetMs / (1000 * 60 * 60)) % 24);
 
+            const hourDiff   = now.getHours()   - targetDate.getHours();
+            const minuteDiff = now.getMinutes() - targetDate.getMinutes();
+            const borrowDay = (hourDiff >= 1 || (hourDiff >= 0 && minuteDiff >= 0)) ? 0 : 1;
+            
             let years = now.getFullYear() - targetDate.getFullYear();
             let months = now.getMonth() - targetDate.getMonth();
-            let days = now.getDate() - targetDate.getDate();
+            let days = now.getDate() - targetDate.getDate() - borrowDay;
 
             if (days < 0) {
                 months--;
