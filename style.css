@@ -28,6 +28,8 @@ body {
     line-height: 1.6; /* Adjusted line height for Roboto */
     min-height: 100vh; /* Ensure full viewport height */
     background-attachment: fixed; /* Keep background fixed if content scrolls */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Color Palette Variables */
@@ -261,27 +263,28 @@ main {
 /* Footer Styling */
 footer {
     text-align: center;
-    padding: 2em 0 1em;
-    margin-top: 2em;
+    padding: 2em 0 1.5em; /* Slightly increased bottom padding for hearts */
+    margin-top: auto; /* This is key for sticky footer */
     position: relative;
-    /* border-top: 1px solid rgba(255, 215, 0, 0.2); -- REMOVED */
+    background-color: rgba(0, 0, 0, 0.2); /* Darker background - adjust alpha as needed */
+    /* border-top: 1px solid rgba(255, 215, 0, 0.1); /* Optional subtle top border */
 }
 
 footer::before {
-    content: '💛';
-    color: var(--primary-yellow); /* Explicit color */
+    content: '💛'; /* yellowHeart */
+    color: var(--primary-yellow);
     position: absolute;
-    bottom: 10px;
+    bottom: 20px; /* Increased from 10px */
     left: 30px;
     font-size: 1.8em;
     opacity: 0.4;
     transform: rotate(20deg);
 }
 footer::after {
-    content: '💜';
-    color: var(--primary-purple); /* Explicit color */
+    content: '💜'; /* purpleHeart */
+    color: var(--primary-purple);
     position: absolute;
-    bottom: 15px;
+    bottom: 25px; /* Increased from 15px */
     right: 35px;
     font-size: 2em;
     opacity: 0.4;
@@ -340,11 +343,18 @@ img { /* General responsive images */
 }
 
 .special-date-message {
-    font-size: 1.3em; /* Make it a bit prominent */
-    color: #FFD700; /* Gold color, or choose another */
+    font-size: 1.3em;
     font-weight: bold;
-    /* Optional: Add a subtle text shadow like the header */
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Existing shadow, can keep or adjust */
+    color: white; /* Changed from #FFD700 to white */
+}
+
+.special-date-message.message-yellow {
+    color: #FFD700; /* Gold/Yellow - var(--primary-yellow) could also be used */
+}
+
+.special-date-message.message-purple {
+    color: #8A2BE2; /* BlueViolet/Purple - var(--primary-purple) could also be used */
 }
 
 #love-message {
@@ -355,16 +365,29 @@ img { /* General responsive images */
 }
 
 .secret-textbox-container {
-    text-align: center; /* Center the textarea block */
-    margin: 1.5em 0; /* Add some space around the textarea */
+    /* text-align: center; /* No longer needed if wrapper is margin: auto */
+    margin: 1.5em 0;
+}
+
+.input-with-button-wrapper {
+    display: flex;
+    align-items: stretch; /* Make items same height */
+    width: 80%; /* Or match #secret-textbox's width approach */
+    max-width: 560px; /* Adjust to accommodate button */
+    margin: 0 auto; /* Center the wrapper */
 }
 
 #secret-textbox {
-    width: 80%; /* Or a fixed width like 300px, adjust as needed */
-    max-width: 500px; /* Maximum width */
+    flex-grow: 1; /* Textarea takes available space */
+    /* Keep existing width/max-width if not using wrapper's width, or set to 100% of flex item */
+    /* Remove margin if handled by wrapper or button */
     min-height: 100px; /* Decent starting height */
     padding: 15px;
-    border-radius: 10px; /* Rounded corners */
+    /* border-radius: 10px; /* Rounded corners - adjusted for button */
+    border-top-right-radius: 0;    /* For seamless connection */
+    border-bottom-right-radius: 0; /* For seamless connection */
+    border-top-left-radius: 10px; /* Keep original radius */
+    border-bottom-left-radius: 10px; /* Keep original radius */
     border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for the glass effect */
     background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
     backdrop-filter: blur(8px) brightness(1.2); /* Blur and slight bloom (brightness) */
@@ -375,6 +398,34 @@ img { /* General responsive images */
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2), /* Outer bloom */
                 0 0 25px rgba(255, 255, 255, 0.1); /* Wider, softer bloom */
     transition: all 0.3s ease; /* Smooth transition for focus effects */
+    /* Ensure existing margin is removed or adjusted if needed for flex wrapper */
+    margin: 0; /* Remove individual margin if wrapper handles it */
+    resize: none;
+}
+
+#send-secret-code-button {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px) brightness(1.2);
+    -webkit-backdrop-filter: blur(8px) brightness(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: none; /* Seamless connection */
+    color: #E0E0E0;
+    padding: 15px; /* Match textbox padding for height consistency */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    cursor: pointer;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 10px;  /* Match textbox overall radius */
+    border-bottom-right-radius: 10px; /* Match textbox overall radius */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); /* Softer bloom than textbox focus */
+    transition: all 0.3s ease;
+    margin-left: -1px; /* Overlap border slightly for seamless look */
+}
+
+#send-secret-code-button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); /* Gold hover bloom */
 }
 
 #secret-textbox::placeholder {

@@ -281,65 +281,85 @@ document.addEventListener('DOMContentLoaded', () => {
         //     secretTextbox.classList.remove('focus-yellow', 'focus-purple');
         // });
 
-        if (messageContainer) { // Ensure messageContainer is also valid before adding input listener
-            secretTextbox.addEventListener('input', (event) => {
-                const rawValue = event.target.value;
-                const trimmedRawValue = rawValue.trim();
-                const sanitizedValue = sanitizeTextForMatching(rawValue);
+        // The 'input' listener's complex logic is removed.
+        // It can be left empty or with minimal logic if needed in the future (e.g., char count).
+        // For now, we are removing the previous message/carousel processing from it.
+        secretTextbox.addEventListener('input', (event) => {
+            // Intentionally left largely empty or for basic input handling only.
+            // The "Te amo" auto-append to the textbox value is also removed from here.
+        });
+    }
 
-                let messageForContainer = '';
+    const sendSecretCodeButton = document.getElementById('send-secret-code-button');
 
-                if (sanitizedValue.includes("teamomais")) {
-                    messageForContainer = "Aaaa não meu amor" + smilingFaceWithHearts + " Eu que te amo muitoo mais" + purpleHeart + yellowHeart;
-                } else if (trimmedRawValue === "1905" || trimmedRawValue === "19/05") {
-                    messageForContainer = purpleHeart + "Feliz Aniversário Gabi, meu Amor" + yellowHeart;
-                } else if (trimmedRawValue === "2611" || trimmedRawValue === "26/11") {
-                    messageForContainer = purpleHeart + "Feliz Aniversário para mim" + smilingFaceWithHearts + yellowHeart;
+    if (sendSecretCodeButton && secretTextbox && messageContainer) {
+        sendSecretCodeButton.addEventListener('click', () => {
+            const rawValue = secretTextbox.value;
+            const trimmedRawValue = rawValue.trim();
+            const sanitizedValue = sanitizeTextForMatching(rawValue);
+
+            let messageForContainer = ''; // Holds the message to be displayed
+
+            // Priority: 1. "Te amo mais", 2. "Te amo", 3. Birthdays
+            if (sanitizedValue.includes("teamomais")) {
+                messageForContainer = "Aaaa não meu amor" + smilingFaceWithHearts + " Eu que te amo muitoo mais" + purpleHeart + yellowHeart;
+            } else if (sanitizedValue.includes("teamo")) {
+                messageForContainer = "Eu também te amo muito!" + smilingFaceWithHearts + purpleHeart;
+            } else if (trimmedRawValue === "1905" || trimmedRawValue === "19/05") {
+                messageForContainer = purpleHeart + "Feliz Aniversário Gabi, meu Amor" + yellowHeart;
+            } else if (trimmedRawValue === "2611" || trimmedRawValue === "26/11") {
+                messageForContainer = purpleHeart + "Feliz Aniversário para mim" + smilingFaceWithHearts + yellowHeart;
+            }
+
+            if (messageForContainer) {
+                messageContainer.innerHTML = '';
+                const messageElement = document.createElement('p');
+                messageElement.className = 'special-date-message'; // Set base class
+
+                // Add random color logic HERE:
+                const randomNumber = Math.random() * 100; // 0 to 99.99...
+                if (randomNumber < 2) { // 2% chance for yellow
+                    messageElement.classList.add('message-yellow');
+                } else if (randomNumber < 4) { // Next 2% chance for purple (total 4%)
+                    messageElement.classList.add('message-purple');
                 }
+                // Else, no additional class is added, so it uses the base .special-date-message color (white).
 
-                if (messageForContainer) {
-                    messageContainer.innerHTML = '';
-                    const messageElement = document.createElement('p');
-                    messageElement.className = 'special-date-message';
-                    messageElement.innerHTML = messageForContainer;
-                    messageContainer.appendChild(messageElement);
-                } else if (trimmedRawValue === "22" && !secretImageAdded) {
-                    if (typeof stopAutoSlide === 'function') stopAutoSlide();
-                    if (Array.isArray(imagePaths) && Array.isArray(imageCaptions) && typeof currentImageIndex !== 'undefined') {
-                        imagePaths.unshift('images/photo_secret_22.jpg');
-                        const bolsonaroCaption = brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark;
-                        imageCaptions.unshift(bolsonaroCaption);
-                        secretImageAdded = true;
-                        currentImageIndex = 0;
-                        if (typeof populateFilmstrip === 'function') populateFilmstrip();
-                        if (typeof slideTo === 'function' && filmstripElement) {
-                            const initialTransform = filmstripElement.style.transition;
-                            filmstripElement.style.transition = 'none';
-                            slideTo(currentImageIndex);
-                            filmstripElement.offsetHeight;
-                            filmstripElement.style.transition = initialTransform;
-                        }
-                        if (typeof startAutoSlide === 'function') startAutoSlide();
+                messageElement.innerHTML = messageForContainer;
+                messageContainer.appendChild(messageElement);
+            } else if (trimmedRawValue === "22" && !secretImageAdded) {
+                // Handle "22" Carousel Trigger
+                if (typeof stopAutoSlide === 'function') stopAutoSlide();
+                if (Array.isArray(imagePaths) && Array.isArray(imageCaptions) && typeof currentImageIndex !== 'undefined') {
+                    imagePaths.unshift('images/photo_secret_22.jpg');
+                    const bolsonaroCaption = brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark;
+                    imageCaptions.unshift(bolsonaroCaption);
+                    secretImageAdded = true;
+                    currentImageIndex = 0;
+                    if (typeof populateFilmstrip === 'function') populateFilmstrip();
+                    if (typeof slideTo === 'function' && filmstripElement) {
+                        const initialTransform = filmstripElement.style.transition;
+                        filmstripElement.style.transition = 'none';
+                        slideTo(currentImageIndex);
+                        filmstripElement.offsetHeight;
+                        filmstripElement.style.transition = initialTransform;
                     }
-                    messageContainer.innerHTML = '';
-                    if (typeof displaySpecialDateMessage === 'function') {
-                        displaySpecialDateMessage(); // displaySpecialDateMessage uses its own internal reference to messageContainer
-                    }
-                } else {
-                    messageContainer.innerHTML = '';
-                    if (typeof displaySpecialDateMessage === 'function') {
-                        displaySpecialDateMessage(); // displaySpecialDateMessage uses its own internal reference to messageContainer
-                    }
+                    if (typeof startAutoSlide === 'function') startAutoSlide();
                 }
+                messageContainer.innerHTML = '';
+                if (typeof displaySpecialDateMessage === 'function') {
+                    displaySpecialDateMessage();
+                }
+            } else {
+                // Default: No specific trigger, reset to default date-based message
+                messageContainer.innerHTML = '';
+                if (typeof displaySpecialDateMessage === 'function') {
+                    displaySpecialDateMessage();
+                }
+            }
 
-                if (sanitizedValue.includes("teamo") && !sanitizedValue.includes("teamomais")) {
-                    const replyText = "Te amo mais amor" + smilingFaceWithHearts;
-                    if (!rawValue.endsWith(replyText) && !rawValue.endsWith(replyText.trim())) {
-                        const prefix = (rawValue.length === 0 || rawValue.endsWith(' ') || rawValue.endsWith('\n')) ? "" : " ";
-                        event.target.value += prefix + replyText;
-                    }
-                }
-            });
-        }
+            // Clear the textbox after processing, if desired
+            // secretTextbox.value = "";
+        });
     }
 });
