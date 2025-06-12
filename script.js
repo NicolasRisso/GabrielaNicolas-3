@@ -70,13 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Timer Code END ---
 
     // --- Carousel Code START ---
-    const imagePaths = [
+    let imagePaths = [ // Changed from const to let
         'images/photo1.jpg', 'images/photo2.jpg', 'images/photo3.jpg', 'images/photo4.jpg', 'images/photo5.jpg',
         'images/photo6.jpg', 'images/photo7.jpg', 'images/photo8.jpg', 'images/photo9.jpg', 'images/photo10.jpg',
         'images/photo11.jpg', 'images/photo12.jpg'
     ];
 
-    const imageCaptions = [
+    let imageCaptions = [ // Changed from const to let
         "Nosso primeiro date <3", "Ibirapuera e Restaurante Medieval", "Role no Shopping 🥰",
         "Passeio no MASP", "Show das Luzes no Jardim Botânico", "💛Dia que começamos a Namorar💜",
         "Nossa primeira viagem juntos <3", "Mirante de Serra Negra", "TOKYO😶",
@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevButtonElement = document.getElementById('prev-button');
     const nextButtonElement = document.getElementById('next-button');
 
+    let secretImageAdded = false; // Flag for the secret image
     let currentImageIndex = 0;
     const autoSlideDelay = 4000;
     let autoSlideIntervalId;
@@ -218,6 +219,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- Carousel Code END ---
 
+    function sanitizeTextForMatching(text) {
+        if (typeof text !== 'string') return '';
+        // Regex for emoji removal (using a range that covers many emojis)
+        const emojiRegex = /[-☀-➿]/gu;
+        return text.replace(emojiRegex, '')
+                   .toLowerCase()
+                   .replace(/\s+/g, '');
+    }
+
     function displaySpecialDateMessage() {
         const today = new Date();
         const day = today.getDate();
@@ -244,4 +254,92 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     displaySpecialDateMessage(); // Call the function to check and display the message on page load
+
+    const secretTextbox = document.getElementById('secret-textbox');
+    const messageContainer = document.getElementById('special-message-container'); // Declare messageContainer here for broader scope
+
+    // Helper for emoji strings
+    const purpleHeart = String.fromCodePoint(0x1F49C); // 💜
+    const yellowHeart = String.fromCodePoint(0x1F49B); // 💛
+    const smilingFaceWithHearts = String.fromCodePoint(0x1F970); // 🥰
+    const brazilFlag = String.fromCodePoint(0x1F1E7) + String.fromCodePoint(0x1F1F7); // 🇧🇷
+    const digitTwoEmoji = "2" + String.fromCharCode(0xFE0F) + String.fromCharCode(0x20E3); // 2️⃣
+    const checkMark = String.fromCharCode(0x2705); // ✅
+
+    if (secretTextbox) {
+        secretTextbox.addEventListener('focus', () => {
+            secretTextbox.classList.remove('focus-yellow', 'focus-purple');
+            if (Math.random() < 0.5) {
+                secretTextbox.classList.add('focus-yellow');
+            } else {
+                secretTextbox.classList.add('focus-purple');
+            }
+        });
+
+        // Optional: Remove class on blur
+        // secretTextbox.addEventListener('blur', () => {
+        //     secretTextbox.classList.remove('focus-yellow', 'focus-purple');
+        // });
+
+        if (messageContainer) { // Ensure messageContainer is also valid before adding input listener
+            secretTextbox.addEventListener('input', (event) => {
+                const rawValue = event.target.value;
+                const trimmedRawValue = rawValue.trim();
+                const sanitizedValue = sanitizeTextForMatching(rawValue);
+
+                let messageForContainer = '';
+
+                if (sanitizedValue.includes("teamomais")) {
+                    messageForContainer = "Aaaa não meu amor" + smilingFaceWithHearts + " Eu que te amo muitoo mais" + purpleHeart + yellowHeart;
+                } else if (trimmedRawValue === "1905" || trimmedRawValue === "19/05") {
+                    messageForContainer = purpleHeart + "Feliz Aniversário Gabi, meu Amor" + yellowHeart;
+                } else if (trimmedRawValue === "2611" || trimmedRawValue === "26/11") {
+                    messageForContainer = purpleHeart + "Feliz Aniversário para mim" + smilingFaceWithHearts + yellowHeart;
+                }
+
+                if (messageForContainer) {
+                    messageContainer.innerHTML = '';
+                    const messageElement = document.createElement('p');
+                    messageElement.className = 'special-date-message';
+                    messageElement.innerHTML = messageForContainer;
+                    messageContainer.appendChild(messageElement);
+                } else if (trimmedRawValue === "22" && !secretImageAdded) {
+                    if (typeof stopAutoSlide === 'function') stopAutoSlide();
+                    if (Array.isArray(imagePaths) && Array.isArray(imageCaptions) && typeof currentImageIndex !== 'undefined') {
+                        imagePaths.unshift('images/photo_secret_22.jpg');
+                        const bolsonaroCaption = brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark + "Bolsonaro" + brazilFlag + digitTwoEmoji + digitTwoEmoji + checkMark;
+                        imageCaptions.unshift(bolsonaroCaption);
+                        secretImageAdded = true;
+                        currentImageIndex = 0;
+                        if (typeof populateFilmstrip === 'function') populateFilmstrip();
+                        if (typeof slideTo === 'function' && filmstripElement) {
+                            const initialTransform = filmstripElement.style.transition;
+                            filmstripElement.style.transition = 'none';
+                            slideTo(currentImageIndex);
+                            filmstripElement.offsetHeight;
+                            filmstripElement.style.transition = initialTransform;
+                        }
+                        if (typeof startAutoSlide === 'function') startAutoSlide();
+                    }
+                    messageContainer.innerHTML = '';
+                    if (typeof displaySpecialDateMessage === 'function') {
+                        displaySpecialDateMessage(); // displaySpecialDateMessage uses its own internal reference to messageContainer
+                    }
+                } else {
+                    messageContainer.innerHTML = '';
+                    if (typeof displaySpecialDateMessage === 'function') {
+                        displaySpecialDateMessage(); // displaySpecialDateMessage uses its own internal reference to messageContainer
+                    }
+                }
+
+                if (sanitizedValue.includes("teamo") && !sanitizedValue.includes("teamomais")) {
+                    const replyText = "Te amo mais amor" + smilingFaceWithHearts;
+                    if (!rawValue.endsWith(replyText) && !rawValue.endsWith(replyText.trim())) {
+                        const prefix = (rawValue.length === 0 || rawValue.endsWith(' ') || rawValue.endsWith('\n')) ? "" : " ";
+                        event.target.value += prefix + replyText;
+                    }
+                }
+            });
+        }
+    }
 });

@@ -382,10 +382,18 @@ img { /* General responsive images */
     opacity: 0.8;
 }
 
-#secret-textbox:focus {
+#secret-textbox:focus.focus-yellow {
     outline: none;
-    border-color: rgba(255, 215, 0, 0.7); /* Gold border on focus */
-    background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque on focus */
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), /* Gold bloom on focus */
+    border-color: rgba(255, 215, 0, 0.7); /* Gold/Yellow border */
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), /* Gold/Yellow bloom */
                 0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+#secret-textbox:focus.focus-purple {
+    outline: none;
+    border-color: rgba(138, 43, 226, 0.7); /* Purple border */
+    background-color: rgba(255, 255, 255, 0.15); /* Keep background consistent or make it slightly purple-tinted if desired */
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), /* Purple bloom */
+                0 0 30px rgba(138, 43, 226, 0.2);
 }
